@@ -1,36 +1,47 @@
 import pandas as pd
+import streamlit as st
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder
+from sklearn.model_selection import train_test_split
 
-df = pd.read_csv("CAR_DETAILS.csv")
+# Load the data
+@st.cache
+def load_data():
+    df = pd.read_csv("CAR_DETAILS.csv")
+    return df
 
+df = load_data()
+
+# Preprocess the data
+categorical_columns = ['name', 'fuel', 'seller_type', 'transmission', 'owner']
 x = df.drop('selling_price', axis=1)
 y = df['selling_price']
 
-categorical_columns = ['name', 'fuel', 'seller_type', 'transmission', 'owner']
-
 # Apply one-hot encoding to the categorical columns
 preprocessor = ColumnTransformer(
-transformers=[('encoder', OneHotEncoder(), categorical_columns)],
-remainder='passthrough'
+    transformers=[('encoder', OneHotEncoder(), categorical_columns)],
+    remainder='passthrough'
 )
 
-x_encoded = preprocessor.fit_transform(x)
+@st.cache
+def preprocess_data(x):
+    return preprocessor.fit_transform(x)
 
-from sklearn.model_selection import train_test_split
+x_encoded = preprocess_data(x)
 
 # Split the dataset into training and testing sets
 x_train, x_test, y_train, y_test = train_test_split(x_encoded, y, test_size=0.2, random_state=42)
 
-# Initialize the Random Forest Regressor
-rf_regressor = RandomForestRegressor()
-
 # Train the model
-rf_regressor.fit(x_train, y_train)
+@st.cache
+def train_model(x_train, y_train):
+    rf_regressor = RandomForestRegressor()
+    rf_regressor.fit(x_train, y_train)
+    return rf_regressor
 
+rf_regressor = train_model(x_train, y_train)
 
-import streamlit as st
 # Create the Streamlit app
 st.title('Car Selling Price Prediction')
 
@@ -51,13 +62,4 @@ prediction = rf_regressor.predict(user_input_encoded)
 
 # Display the prediction
 st.subheader('Prediction')
-st.write(f'The predicted selling price is: {prediction[0]}')
-
-
-
-
-
-
-
-
-
+st.write(f'The predicted selling price is: {prediction[0]:.2f}')
