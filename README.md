@@ -11,5 +11,6 @@ seller_type: The type of seller (e.g., Individual, Dealer).
 transmission: The type of transmission (e.g., Manual, Automatic).
 owner: The ownership status (e.g., First Owner, Second Owner).
 the graphical analysis,ml model file and app.py is attatched in the repo.
-streamlit app link :
 
+streamlit app link :
+https://data-science-capstone-project-c8se9siiepcwz2kh8mcpv3.streamlit.app/
