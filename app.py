@@ -3,7 +3,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder
 
-df = pd.read_csv("CAR DETAILS (1).csv")
+df = pd.read_csv("CAR_DETAILS.csv")
 
 x = df.drop('selling_price', axis=1)
 y = df['selling_price']
