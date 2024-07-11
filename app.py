@@ -6,7 +6,7 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.model_selection import train_test_split
 
 # Load the data
-@st.cache
+@st.cache_data
 def load_data():
     df = pd.read_csv("CAR_DETAILS.csv")
     return df
@@ -24,7 +24,7 @@ preprocessor = ColumnTransformer(
     remainder='passthrough'
 )
 
-@st.cache
+@st.cache_data
 def preprocess_data(x):
     return preprocessor.fit_transform(x)
 
@@ -34,7 +34,7 @@ x_encoded = preprocess_data(x)
 x_train, x_test, y_train, y_test = train_test_split(x_encoded, y, test_size=0.2, random_state=42)
 
 # Train the model
-@st.cache
+@st.cache_resource
 def train_model(x_train, y_train):
     rf_regressor = RandomForestRegressor()
     rf_regressor.fit(x_train, y_train)
